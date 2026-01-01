@@ -1,9 +1,8 @@
-import GrowthAssets as ga
 
-def sim10():
-    path = "figures/"
+
+def sim10(path="figures/", data_manager=None):
     print("Financial Asset Growth Simulation")
-    DataManager = ga.DataManager()
+    DataManager = dm.DataManager()
     geo_data = []
     arith_data = []
     for _ in range(10):
@@ -14,14 +13,16 @@ def sim10():
         arithmetic_asset.timestep(time_periods)
         geo_data.append(geometric_asset.get_value_history())
         arith_data.append(arithmetic_asset.get_value_history())
-    DataManager.plot_multiple_assets(
+        
+    data_manager.plot_multiple_assets(
         geo_data,
         title="Geometric Asset Value Histories",
         x_label="Time Periods",
         y_label="Asset Value",
         filename=f"{path}geometric_assets.png"
     )
-    DataManager.plot_multiple_assets(
+    
+    data_manager.plot_multiple_assets(
         arith_data,
         title="Arithmetic Asset Value Histories",
         x_label="Time Periods",
@@ -29,10 +30,9 @@ def sim10():
         filename=f"{path}arithmetic_assets.png"
     )
 
-def sim_futures():
-    path = "figures/"
+def sim_futures(path="figures/", data_manager=None):
+
     print("Financial Futures Asset Growth Simulation")
-    DataManager = ga.DataManager()
     
     futures_data = []
     
@@ -40,12 +40,13 @@ def sim_futures():
     time_periods = 2000
     futures_asset.timestep(time_periods)
     
-    DataManager.plot(
+    data_manager.plot(
         futures_asset.get_history(),
         title="Futures Asset Value History",
         x_label="Time Periods",
         y_label="Asset Value",
-        filename=f"{path}future_asset.png"
+        filename=f"{path}future_asset.png",
+        logy=True
     )
     
     futures_data.append(futures_asset.get_history())
@@ -53,7 +54,7 @@ def sim_futures():
     
     futures_data.extend(tempdata)
     
-    DataManager.plot_multiple_assets(
+    data_manager.plot_multiple_assets(
     futures_data,
     title="Futures Asset Value Histories",
     x_label="Time Periods",
@@ -62,4 +63,11 @@ def sim_futures():
     logy=True
     )
 
-sim_futures()
+import GrowthAssets as ga
+import DataManager as dm
+def main():
+    DataManager = dm.DataManager()
+    #sim10(data_manager=DataManager)
+    sim_futures(data_manager=DataManager)
+if __name__ == "__main__":
+    main()
